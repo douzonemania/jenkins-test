@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="admin">
+	<update id="update" parameterType="sitevo">
+		
+				<![CDATA[			
+			update site 
+			set title = #{title}, 
+			profile= #{profile},  
+			welcome_message = #{welcomeMessage},
+			description = #{description}
+			where no = 1;									
+				]]>
+	</update>
+	
+	<select id="findAll" resultType="com.douzone.mysite.vo.SiteVo">
+		
+				<![CDATA[
+				  select no, title, profile, welcome_message as welcomeMessage, description, profile from site							   				
+				]]>
+	</select> 
+</mapper>

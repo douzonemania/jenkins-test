@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+
+	<insert id="insert" parameterType="boardvo">
+		
+				<![CDATA[
+			
+				insert 
+					into board 
+				values	(null, 
+							#{title }, 
+							#{contents }, 
+							0, 
+							sysdate(), 
+							#{groupNo }, 
+							#{groupOrNo}, 
+							#{depth}, 
+							#{userNo})				
+				]]>
+	</insert>
+
+	<update id="update" parameterType="boardVo">
+		<![CDATA[
+		update board 
+		   set title=#{title },
+		       contents=#{contents }
+		 where no=#{no }		   		
+		]]>
+	</update>
+
+	<delete id="delete" parameterType="map"> 
+		<![CDATA[
+		delete
+		  from board 
+		 where no = #{no }		   
+		]]>
+	</delete>
+
+	<select id="findAll">
+		
+				<![CDATA[
+				  select a.no,
+				  		 a.title,
+				  		 a.hit,
+				  		 date_format(a.reg_date, '%Y-%m-%d %p %h:%i:%s') as regDate,
+				  		 a.depth,
+				  		 b.name as userName,
+				  		 a.user_no as userNo
+					from board a, user b
+				   where a.user_no = b.no
+				order by g_no desc, o_no asc				   				
+				]]>
+	</select>
+
+
+
+	<update id="hit" parameterType="long">
+		<![CDATA[
+		update board
+		   set hit = hit + 1
+		 where no=#{no }
+		]]>
+	</update>
+
+
+	<select id="totalCount" parameterType="string"
+		resultType="integer">
+		
+				<![CDATA[
+				select count(*) from board
+				]]>
+	</select>
+
+	<select id="findByNo" parameterType="long" resultType="boardvo">
+		<![CDATA[
+		select	no,
+				title,
+				contents,
+				g_no as groupNo,
+				o_no as groupOrNo,
+				depth,
+				user_no as userNo
+		   from board
+		  where no = #{no }		
+		]]>
+	</select>
+
+
+	<update id="updateOrederNo" parameterType="map">
+		<![CDATA[
+		update board
+		   set o_no = o_no + 1
+		 where g_no = #{groupNo }
+		   and o_no >= #{groupOrNo }
+		]]>
+	</update>
+
+	<select id="findMaxGno" parameterType="string"
+		resultType="integer">
+		
+				<![CDATA[
+				select 
+				max(g_no) 
+				from board
+				]]>
+	</select>
+
+	<select id="findOno" parameterType="Long"
+		resultType="integer">
+		
+				<![CDATA[
+				select 
+				o_no 
+				from board 
+				where no = #{no}
+				]]>
+	</select>
+	
+		<select id="findGno" parameterType="Long"
+		resultType="integer">
+		
+				<![CDATA[
+				select 
+				g_no 
+				from board 
+				where no = #{no}
+				]]>
+	</select>
+	
+			<select id="pList" parameterType="integer" resultType="boardvo">
+		
+				<![CDATA[
+				select 
+				a.no, title, contents, hit, date_format(a.reg_date, '%Y-%m-%d %p %h:%i:%s') as regDate,
+				 g_no, o_no, depth, user_no, b.name 
+				from board a, 
+				user b 
+				where a.user_no = b.no 
+				order by g_no desc, 
+				o_no asc 
+				limit #{start}, 5
+				]]>
+	</select>
+</mapper>
