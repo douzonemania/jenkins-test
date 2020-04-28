@@ -139,7 +139,7 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>tomcat-maven-plugin</artifactId>
 				<configuration>
-					<url>http://192.168.1.58:9090/manager/text</url>
+					<url>http://192.168.1.58:8080/manager/text</url>
 					<path>/mysite07-test</path>
 					<username>admin</username>
 					<password>manager</password>
